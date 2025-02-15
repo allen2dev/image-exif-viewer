@@ -6,19 +6,19 @@ import piexif from 'piexifjs';
 // import heic2any from 'heic2any';
 
 const ImageExifViewer = () => {
-  const [imageInfo, setImageInfo] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imageInfo, setImageInfo] = useState<any>(null);
+  const [imagePreview, setImagePreview] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const formatExifDate = (dateStr) => {
+  const formatExifDate = (dateStr: { split: (arg0: string) => [any, any]; }) => {
     if (!dateStr) return '未知';
     const [date, time] = dateStr.split(' ');
     const [year, month, day] = date.split(':');
     return `${year}年${month}月${day}日 ${time || ''}`;
   };
 
-  const convertDMSToDD = (degrees, minutes, seconds, direction) => {
+  const convertDMSToDD = (degrees: number, minutes: number, seconds: number, direction: string) => {
     let dd = degrees + minutes / 60 + seconds / 3600;
     if (direction === 'S' || direction === 'W') {
       dd = dd * -1;
@@ -26,7 +26,7 @@ const ImageExifViewer = () => {
     return dd;
   };
 
-  const formatGPSCoordinate = (gpsData, ref) => {
+  const formatGPSCoordinate = (gpsData: number[][], ref: string) => {
     if (!gpsData || !ref) return null;
     return convertDMSToDD(
       gpsData[0][0] / gpsData[0][1],
@@ -36,12 +36,15 @@ const ImageExifViewer = () => {
     );
   };
 
-  const readJpegExif = (imageData) => {
+  const readJpegExif = (imageData: string | ArrayBuffer | null) => {
     try {
-      const exifObj = piexif.load(imageData);
+      const exifObj = piexif.load(imageData as string);
       const exif = exifObj["Exif"];
       const gps = exifObj["GPS"];
       const zeroth = exifObj["0th"];
+      if (!zeroth || !exif || !gps) {
+        return {}
+      }
 
       return {
         make: zeroth[piexif.ImageIFD.Make]?.trim(),
@@ -62,7 +65,7 @@ const ImageExifViewer = () => {
     }
   };
 
-  const handleImageUpload = async (e) => {
+  const handleImageUpload = async (e: any) => {
     const file = e.target.files[0];
     if (!file) return;
 
@@ -89,8 +92,8 @@ const ImageExifViewer = () => {
       const exifData = await new Promise((resolve, reject) => {
         reader.onload = (e) => {
           try {
-            previewUrl = e.target.result;
-            const exif = readJpegExif(e.target.result);
+            previewUrl = e.target?.result;
+            const exif = readJpegExif(e.target?.result as string);
             resolve(exif);
           } catch (error) {
             reject(error);
@@ -102,7 +105,7 @@ const ImageExifViewer = () => {
 
       setImagePreview(previewUrl);
       setImageInfo(exifData);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to process image:', error);
       setError(error.message || '处理图片时出错');
       setImageInfo(null);
