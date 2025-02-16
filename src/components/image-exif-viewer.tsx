@@ -169,10 +169,10 @@ const ImageExifViewer = () => {
           {imageInfo && !loading && (
             <div className="mt-4 space-y-2">
               <h3 className="text-lg font-semibold mb-2">EXIF信息</h3>
+              <div>拍摄时间：{formatExifDate(imageInfo.dateTime)}</div>
+              <div>相机型号：{imageInfo.model || '未知'}</div>
               <div className="grid grid-cols-2 gap-4">
-                <div>拍摄时间：{formatExifDate(imageInfo.dateTime)}</div>
                 <div>相机品牌：{imageInfo.make || '未知'}</div>
-                <div>相机型号：{imageInfo.model || '未知'}</div>
                 <div>ISO：{imageInfo.iso || '未知'}</div>
                 <div>光圈：{imageInfo.fNumber ?
                   `f/${(imageInfo.fNumber[0] / imageInfo.fNumber[1]).toFixed(1)}` : '未知'}</div>
