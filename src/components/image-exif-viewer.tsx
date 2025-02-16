@@ -121,9 +121,9 @@ const ImageExifViewer = () => {
         <CardTitle>图片EXIF信息查看器</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* 上传区域 */}
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+          <div className="border-2 border-dashed border-gray-300 rounded-lg p-2 text-center">
             <input
               type="file"
               accept="image/*, .heic"
@@ -159,7 +159,7 @@ const ImageExifViewer = () => {
               <img
                 src={imagePreview}
                 alt="预览"
-                style={{ width: '200px' }}
+                style={{ width: '200px', margin: '0 auto' }}
                 className="max-w-full h-auto rounded-lg"
               />
             </div>
